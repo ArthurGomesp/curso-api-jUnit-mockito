@@ -18,4 +18,6 @@ public class User {
     private String email;
     private String password;
 
+    public User(int i, String arthur, String gomes, String mail, String number) {
+    }
 }
