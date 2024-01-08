@@ -46,9 +46,15 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserDTO> update(@PathVariable int id,@RequestBody UserDTO dto){
+    public ResponseEntity<UserDTO> update(@PathVariable Long id,@RequestBody UserDTO dto){
         dto.setId(id);
         return ResponseEntity.ok().body(mapper.map(userService.update(dto), UserDTO.class));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@PathVariable long id){
+        userService.delete(id);
+        return ResponseEntity.notFound().build();
     }
 }
 
