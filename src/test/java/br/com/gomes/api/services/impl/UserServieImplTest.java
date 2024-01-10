@@ -16,9 +16,14 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
+
+
+import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
 
 @SpringBootTest
 class UserServieImplTest {
@@ -40,7 +45,7 @@ class UserServieImplTest {
     private Optional<User> userOptional;
 
     @BeforeEach
-    void setup(){
+    void setup() {
         MockitoAnnotations.openMocks(this);
         startUser();
     }
@@ -48,27 +53,34 @@ class UserServieImplTest {
     @Test
     @DisplayName("when find user by id then return an user instance")
     void findById() {
-        Mockito.when(userRepository.findById(Mockito.any())).thenReturn(userOptional);
+        when(userRepository.findById(Mockito.any())).thenReturn(userOptional);
         User response = userServie.findById(ID);
 
-        Assertions.assertEquals(User.class, response.getClass());
+        assertEquals(User.class, response.getClass());
     }
 
     @Test
     @DisplayName("when find user by id then return object not found Exception")
     void findByIdFailed() {
-        Mockito.when(userRepository.findById(Mockito.any())).thenThrow(new ObjectNotFoundException("Objeto não encontrado"));
+        when(userRepository.findById(Mockito.any())).thenThrow(new ObjectNotFoundException("Objeto não encontrado"));
 
         try {
             userServie.findById(ID);
-        }catch (Exception e ){
-            Assertions.assertEquals(ObjectNotFoundException.class, e.getClass());
+        } catch (Exception e) {
+            assertEquals(ObjectNotFoundException.class, e.getClass());
         }
     }
 
-//    @Test
-//    void findAll() {
-//    }
+    @Test
+    @DisplayName("when find all users then return object list of users")
+    void findAll() {
+        when(userRepository.findAll()).thenReturn(List.of(user));
+        List<User> response = userServie.findAll();
+        assertNotNull(response);
+        assertEquals(1,response.size());
+        assertEquals(User.class, response.get(0).getClass());
+
+    }
 //
 //    @Test
 //    void createUser() {
@@ -82,9 +94,9 @@ class UserServieImplTest {
 //    void delete() {
 //    }
 
-    private void startUser(){
-        User user1 = new User(ID, NAME, EMAIL, PASSWORD);
-        UserDTO userDTO1 = new UserDTO(ID, NAME, EMAIL, PASSWORD);
-        userOptional = Optional.of( new User(ID,NAME, EMAIL, PASSWORD));
+    private void startUser() {
+        user = new User(ID, NAME, EMAIL, PASSWORD);
+        userDTO = new UserDTO(ID, NAME, EMAIL, PASSWORD);
+        userOptional = Optional.of(new User(ID, NAME, EMAIL, PASSWORD));
     }
 }
