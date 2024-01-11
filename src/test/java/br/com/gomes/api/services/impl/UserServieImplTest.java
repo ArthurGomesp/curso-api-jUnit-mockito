@@ -2,6 +2,7 @@ package br.com.gomes.api.services.impl;
 
 import br.com.gomes.api.domain.User;
 import br.com.gomes.api.domain.dto.UserDTO;
+import br.com.gomes.api.exceptions.DataIntegratyViolationException;
 import br.com.gomes.api.exceptions.ObjectNotFoundException;
 import br.com.gomes.api.repositories.UserRepository;
 import org.junit.jupiter.api.Assertions;
@@ -78,7 +79,7 @@ class UserServieImplTest {
         when(userRepository.findAll()).thenReturn(List.of(user));
         List<User> response = userServie.findAll();
         assertNotNull(response);
-        assertEquals(1,response.size());
+        assertEquals(1, response.size());
         assertEquals(User.class, response.get(0).getClass());
 
         assertEquals(ID, response.get(0).getId());
@@ -99,6 +100,20 @@ class UserServieImplTest {
         assertEquals(NAME, response.getName());
         assertEquals(EMAIL, response.getEmail());
         assertEquals(PASSWORD, response.getPassword());
+
+
+    }
+
+    @Test
+    @DisplayName("when fail  create a user ")
+    void createUser1() {
+        when(userRepository.findByEmail(anyString())).thenReturn(userOptional);
+        try {
+            userOptional.get().setId(2L);
+            userServie.createUser(userDTO);
+        } catch (Exception ex){
+            assertEquals(DataIntegratyViolationException.class, ex.getClass());
+        }
 
 
     }
