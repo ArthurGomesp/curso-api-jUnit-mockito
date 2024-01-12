@@ -117,10 +117,19 @@ class UserServieImplTest {
 
 
     }
-//
-//    @Test
-//    void update() {
-//    }
+
+    @Test
+    @DisplayName("when sucssesfully update user")
+    void update() {
+        when(userRepository.save(any())).thenReturn(user);
+        User response = userServie.update(userDTO);
+        assertNotNull(response);
+        assertEquals(User.class, response.getClass());
+        assertEquals(ID, response.getId());
+        assertEquals(NAME, response.getName());
+        assertEquals(EMAIL, response.getEmail());
+        assertEquals(PASSWORD, response.getPassword());
+    }
 //
 //    @Test
 //    void delete() {
