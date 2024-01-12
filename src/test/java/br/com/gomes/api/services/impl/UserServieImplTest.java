@@ -130,6 +130,19 @@ class UserServieImplTest {
         assertEquals(EMAIL, response.getEmail());
         assertEquals(PASSWORD, response.getPassword());
     }
+    @Test
+    @DisplayName("when fail update user")
+    void update1() {
+        when(userRepository.findByEmail(anyString())).thenReturn(userOptional);
+        try {
+            userOptional.get().setId(2L);
+            userServie.createUser(userDTO);
+        } catch (Exception ex){
+            assertEquals(DataIntegratyViolationException.class, ex.getClass());
+        }
+
+
+    }
 //
 //    @Test
 //    void delete() {
