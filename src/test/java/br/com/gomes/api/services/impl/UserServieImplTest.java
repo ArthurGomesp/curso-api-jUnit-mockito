@@ -151,6 +151,17 @@ class UserServieImplTest {
         userServie.delete(ID);
         verify(userRepository, times(1)).deleteById(anyLong());
     }
+    @Test
+    void deleteWithNotFoundException() {
+        when(userRepository.findById(anyLong())).thenThrow(new ObjectNotFoundException("objeto não encontrado"));
+    try {
+        userServie.delete(ID);
+    }  catch (Exception e ){
+        assertEquals(ObjectNotFoundException.class ,e.getClass());
+        assertEquals("objeto não encontrado" ,e.getMessage());
+
+    }
+    }
 
     private void startUser() {
         user = new User(ID, NAME, EMAIL, PASSWORD);
