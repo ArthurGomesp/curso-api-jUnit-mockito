@@ -53,15 +53,12 @@ class UserControllerTest {
     public static final String EMAIL = "arthur@gmail.com";
     public static final String PASSWORD = "1234";
 
-    private User user;
-    private UserDTO userDTO;
+    private User user = new User();
+    private UserDTO userDTO = new UserDTO();
 
 
     @Autowired
     private MockMvc mockMvc;
-//
-//    @MockBean
-//    private UserService userService;
 
 
     @InjectMocks
